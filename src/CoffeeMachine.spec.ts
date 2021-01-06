@@ -233,8 +233,8 @@ const createTestEnvWithMocks = ({
   const cupStand = new CupStand(cupStandStatus);
   const coffeeMachine = new CoffeeMachine(machineTumbler, [
     new BoilerDevice(boiler, machineTumbler),
-    new CupStandDevice(cupStand, waterSource, machineTumbler),
-    new WaterSourceDevice(waterSource, machineTumbler),
+    new CupStandDevice(cupStand, machineTumbler),
+    new WaterSourceDevice(cupStand, waterSource, machineTumbler),
     new CupStandHeaterDevice(cupStand, cupStandHeater, machineTumbler),
   ]);
   coffeeMachine.activate();
