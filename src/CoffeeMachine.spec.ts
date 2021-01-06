@@ -86,21 +86,8 @@ describeClass(CoffeeMachine, {
       expect(boiler.enabled).toBe(false);
     });
 
-    it('should open water source', () => {
-      const { coffeeMachine, waterSource } = createTestEnv();
-      coffeeMachine.start();
-      expect(waterSource.opened).toBe(true);
-    });
-
     it('should not open water source if boiler is empty', () => {
       const { coffeeMachine, waterSource } = createTestEnv({ boilerIsEmpty: true });
-      coffeeMachine.start();
-      expect(waterSource.opened).toBe(false);
-    });
-
-    it('should not open water source if heated stand has not cup', () => {
-      const cupStandStatus = CupStandStatus.NoCup;
-      const { coffeeMachine, waterSource } = createTestEnv({ cupStandStatus });
       coffeeMachine.start();
       expect(waterSource.opened).toBe(false);
     });
@@ -135,7 +122,7 @@ describeClass(CoffeeMachine, {
       expect(waterSource.opened).toBe(false);
     });
 
-    it('should disable cup stand heater source', () => {
+    it('should disable cup stand heater', () => {
       const cupStandStatus = CupStandStatus.CupNotEmpty;
       const { coffeeMachine, cupStandHeater } = createTestEnv({ cupStandStatus });
       coffeeMachine.start();

@@ -1,5 +1,5 @@
 import { merge } from 'rxjs';
-import { debounce } from 'rxjs/operators';
+import { debounce, filter } from 'rxjs/operators';
 
 import { Device } from '../Device';
 import { Heater } from '../Heater';
@@ -25,10 +25,12 @@ export class CupStandHeaterDevice implements Device {
 
   private enableDisableHeaterOnCupNotEmptyWhenMachineEnabled(): void {
     merge(this.cupStand.hasNotEmptyCup$, this.machineTumbler.onEnable)
-      .pipe(debounce(() => this.machineTumbler.onEnable))
-      .subscribe(() =>
-        this.cupStand.hasNotEmptyCup() ? this.heater.enable() : this.heater.disable(),
-      );
+      .pipe(filter(() => this.machineTumbler.isEnabled()))
+      .subscribe(() => this.toggleHeater());
+  }
+
+  private toggleHeater(): void {
+    return this.cupStand.hasNotEmptyCup() ? this.heater.enable() : this.heater.disable();
   }
 
   private disableHeaterOnMachineDisableAfterCupTaken(): void {

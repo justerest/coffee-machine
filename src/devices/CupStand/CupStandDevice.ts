@@ -1,4 +1,5 @@
-import { debounce } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { Device } from '../Device';
 import { MachineTumbler } from '../MachineTumbler';
@@ -22,9 +23,13 @@ export class CupStandDevice implements Device {
   }
 
   private openCloseWaterSourceOnCupChangesWhenMachineEnabled(): void {
-    this.cupStand.hasCup$
-      .pipe(debounce(() => this.machineTumbler.onEnable))
-      .subscribe((hasCup) => (hasCup ? this.waterSource.open() : this.waterSource.close()));
+    merge(this.cupStand.hasCup$, this.machineTumbler.onEnable)
+      .pipe(filter(() => this.machineTumbler.isEnabled()))
+      .subscribe(() => this.toggleWaterSource());
+  }
+
+  private toggleWaterSource(): void {
+    return this.cupStand.hasCup() ? this.waterSource.open() : this.waterSource.close();
   }
 
   private disableMachineOnCupFull(): void {
