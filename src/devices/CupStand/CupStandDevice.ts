@@ -19,6 +19,7 @@ export class CupStandDevice implements Device {
 
   activate(): void {
     this.openCloseWaterSourceOnCupChangesWhenMachineEnabled();
+    this.closeWaterSourceOnCupFull();
     this.disableMachineOnCupFull();
   }
 
@@ -30,6 +31,10 @@ export class CupStandDevice implements Device {
 
   private toggleWaterSource(): void {
     return this.cupStand.hasCup() ? this.waterSource.open() : this.waterSource.close();
+  }
+
+  private closeWaterSourceOnCupFull(): void {
+    this.cupStand.onCupFull.subscribe(() => this.waterSource.close());
   }
 
   private disableMachineOnCupFull(): void {

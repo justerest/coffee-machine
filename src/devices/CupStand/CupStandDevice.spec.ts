@@ -43,6 +43,13 @@ describe(CupStandDevice.name, () => {
     expect(waterSource.opened).toBe(true);
   });
 
+  it('should close water source on cup full', () => {
+    const { machineTumbler, cupStandStatusSubject, waterSource } = createTestEnv();
+    machineTumbler.enable();
+    cupStandStatusSubject.next(CupStandStatus.CupFull);
+    expect(waterSource.opened).toBe(false);
+  });
+
   it('should disable machine on cup full', () => {
     const { machineTumbler, cupStandStatusSubject } = createTestEnv();
     machineTumbler.enable();
